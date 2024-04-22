@@ -5,55 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Recommendation App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            margin-right: 10px;
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        input[type="submit"] {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 10px;
-        }
+        /* Your CSS styles */
     </style>
 </head>
 <body>
@@ -67,31 +19,51 @@
     </div>
 
     <script>
-        document.getElementById('bookForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const bookName = document.getElementById('bookName').value;
-            fetch('/recommend', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    bookName: bookName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const recommendations = data.recommendations;
-                const recommendationsList = document.getElementById('recommendations');
-                recommendationsList.innerHTML = '';
+       document.getElementById('bookForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const bookName = document.getElementById('bookName').value;
+    fetch('/recommend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            bookName: bookName
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            // Display error message if the server returns an error
+            const recommendationsList = document.getElementById('recommendations');
+            recommendationsList.innerHTML = '';
+            const li = document.createElement('li');
+            li.textContent = data.error;
+            recommendationsList.appendChild(li);
+        } else if (data.recommendations) {
+            // Display recommendations if the server returns recommendations
+            const recommendations = data.recommendations;
+            const recommendationsList = document.getElementById('recommendations');
+            recommendationsList.innerHTML = '';
+            if (recommendations.length === 0) {
+                // Display a message indicating that the book doesn't exist
+                const li = document.createElement('li');
+                li.textContent = "Sorry, the book doesn't exist in our database.";
+                recommendationsList.appendChild(li);
+            } else {
                 recommendations.forEach(book => {
                     const li = document.createElement('li');
                     li.textContent = book;
                     recommendationsList.appendChild(li);
                 });
-            })
-            .catch(error => console.error('Error:', error));
-        });
+            }
+        } else {
+            console.error('Error: Unexpected response from server');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
     </script>
 </body>
 </html>
