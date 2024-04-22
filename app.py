@@ -32,10 +32,14 @@ model.fit(book_sparse)
 
 # Function to recommend books
 def recommend_book(book_name):
-    book_id = np.where(book_pivot.index == book_name)[0][0]
-    distances, suggestions = model.kneighbors(book_pivot.iloc[book_id,:].values.reshape(1,-1), n_neighbors=6)
-    recommended_books = [book_pivot.index[suggestion] for suggestion in suggestions]
-    return recommended_books
+    if book_name not in book_pivot.index:
+        return "Sorry, the book '{}' does not exist in our database.".format(book_name)
+    else:
+        book_id = np.where(book_pivot.index == book_name)[0][0]
+        distances, suggestions = model.kneighbors(book_pivot.iloc[book_id,:].values.reshape(1,-1), n_neighbors=6)
+        recommended_books = [book_pivot.index[suggestion] for suggestion in suggestions]
+        return recommended_books
+
 
 # Flask app
 app = Flask(__name__)
@@ -51,9 +55,15 @@ def get_recommendations():
     data = request.json
     book_name = data.get('bookName')
     recommendations = recommend_book(book_name)
-    # Convert the recommendations from Index object to a list
-    recommendations_list = recommendations[0].tolist()
-    return jsonify({'recommendations': recommendations_list})
+    
+    if isinstance(recommendations, str):
+        # If recommendations is a string (indicating the book doesn't exist), return it directly
+        return jsonify({'error': recommendations})
+    else:
+        # If recommendations is a list, convert it to a JSON response
+        recommendations_list = recommendations[0].tolist()
+        return jsonify({'recommendations': recommendations_list})
+
 
 # Run the Flask app
 if __name__ == '__main__':
