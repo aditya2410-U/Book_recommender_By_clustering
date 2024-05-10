@@ -34,6 +34,7 @@ The app consists of two main components:
    ```bash
    python app.py
 
+## Project Images
 
 ## Getting Started
 
@@ -44,7 +45,5 @@ To run the app locally, follow these steps:
 ```bash
 git clone https://github.com/your-username/book-recommendation-app.git
 
-## Project Images
-![1](https://github.com/aditya2410-U/Book_recommender_By_clustering/assets/102215488/d501432a-a21f-4bba-ba84-66298b61c032)
 
 
