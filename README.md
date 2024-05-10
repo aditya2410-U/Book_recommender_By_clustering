@@ -35,6 +35,10 @@ The app consists of two main components:
    python app.py
 
 ## Project Images
+![1](https://github.com/aditya2410-U/Book_recommender_By_clustering/assets/102215488/dcbe113d-bc77-454e-9d96-44ff71d1652e)
+![2](https://github.com/aditya2410-U/Book_recommender_By_clustering/assets/102215488/2017c5f9-bfa7-4fd5-8864-f0c95e9e0075)
+![3](https://github.com/aditya2410-U/Book_recommender_By_clustering/assets/102215488/b1bc80fd-912a-4e92-a15e-5a15859ed474)
+
 
 ## Getting Started
 
